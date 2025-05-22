@@ -1,0 +1,27 @@
+.card-body {
+  background-color: #afafaf;
+}
+
+@font-face {
+  font-family: 'Leckerli One';
+  src: url('../assets/fonts/LeckerliOne-Regular.ttf');
+}
+
+.footer-brand {
+  font-family: 'Leckerli One';
+}
+
+
+#notification {
+  position: fixed;
+  display: block;
+  z-index: 5;
+  top: 70px;
+  right: 10px;
+}
+
+
+.margin-right {
+  margin-right: 20px;
+  margin-left: 20px;
+}

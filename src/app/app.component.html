@@ -1,0 +1,32 @@
+<div id="notification"></div>
+<app-navbar></app-navbar>
+
+<br />
+
+<div class="container-fluid" style="height: 100%">
+  <div class="columns">
+    <div class="column container is-fluid is-one-quarter">
+      <app-lateral-navbar></app-lateral-navbar>
+    </div>
+
+    <div class="column is-fluid margin-right">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<!-- footer -->
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <span class="footer-brand">MusicMeets</span> by
+      <a href="https://pabloospino.com/">pabloospino.com</a>.
+      <br />
+      © {{ year }} Copyright:
+    </p>
+  </div>
+</footer>

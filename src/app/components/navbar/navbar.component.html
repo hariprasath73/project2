@@ -1,0 +1,103 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <div id="navbar-brand" class="navbar-item">MusicMeets</div>
+    <a id="navbar-burger" role="button" class="navbar-burger burger"
+      aria-label="menu"
+      aria-expanded="false" data-target="navbarBasicExample"
+      (click)="collapse()">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbar-menu" class="navbar-menu">
+    <div class="navbar-start">
+      <!-- <a class="navbar-item">
+        Home
+      </a>
+
+      <a class="navbar-item">
+        Documentation
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            About
+          </a>
+          <a class="navbar-item">
+            Jobs
+          </a>
+          <a class="navbar-item">
+            Contact
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">
+            Report an issue
+          </a>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="navbar-end">
+      <div class="dropdown is-active search-bar">
+
+        <div class="control">
+          <input class="input" type="text" placeholder="Find event"
+            (keydown)="getEventsByTitle(searchEventInput.value)"
+            #searchEventInput>
+        </div>
+
+        <div *ngIf="events.length> 0" class="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+
+            <a *ngFor="let event of events"
+              routerLink="/events/{{event.id}}"
+              class="dropdown-item"
+              (click)="events= []; searchEventInput.value= ''">
+              {{event.title}}
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="! tokenStorageService.isLogged()" class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary" (click)="openModalSignUp()">
+            <strong>Sign up</strong>
+          </a>
+          <a class="button is-light" (click)="openModalSignIn()">
+            Log in
+          </a>
+        </div>
+      </div>
+
+      <div *ngIf="tokenStorageService.isLogged()" class="navbar-item">
+        {{getUsername()}}
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div id="sign_up_modal" class="modal">
+  <div class="modal-background" (click)="closeModalSignUp()"></div>
+  <div class="modal-card">
+    <app-register (isSignUpEmitter)="isSignUpEmitter($event)"></app-register>
+  </div>
+</div>
+
+
+<div id="sign_in_modal" class="modal">
+  <div class="modal-background" (click)="closeModalSignIn()"></div>
+  <div class="modal-card">
+    <app-login (isSignInEmitter)="isSignInEmitter($event)"></app-login>
+  </div>
+</div>
+`

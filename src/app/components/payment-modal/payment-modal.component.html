@@ -1,0 +1,118 @@
+<header class="modal-card-head">
+  <nav class="breadcrumb is-centered has-succeeds-separator"
+    aria-label="breadcrumbs">
+    <ul>
+      <li [className]="step_id == 0 ? 'is-active': ''"><a>Tickets</a></li>
+      <li [className]="step_id == 1 ? 'is-active': ''"><a>Documentation</a></li>
+      <li [className]="step_id == 2 ? 'is-active': ''"><a>Checkout</a></li>
+      <li [className]="step_id == 3 ? 'is-active': ''"><a>Confirmation</a></li>
+    </ul>
+  </nav>
+</header>
+<section class="modal-card-body">
+  <div class="content">
+    <div id="select-number-tickets" [style.display]="step_id != 0 ? 'none' :
+      ''">
+      <div *ngFor="let fee of event.fees; let j= index" class="control">
+
+        <div class="columns">
+          <div class="column is-10">
+            <label class="label">{{fee.title}} - {{fee.price}}: </label>
+            <span class="help">{{fee.description}}</span>
+          </div>
+          <div class="column">
+            <div class="select">
+              <select (change)="changeTotalNumber($event, fee.id, j)">
+                <option *ngFor="let op of arrayOne(11); let i= index;"
+                  value="{{i}}">{{i}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="insert-names-of-tickets" [style.display]="step_id != 1 ? 'none'
+      :''">
+
+      <div *ngIf="this.total_people == 0">
+        <i class="far fa-frown fa-10x center"></i>
+        <hr>
+        <span class="center">We want people to come. 0 is not a
+          possible number.
+        </span>
+      </div>
+
+      <form>
+        <div *ngFor="let fee of event.fees; let i= index">
+          <div *ngIf="fee_tickets[i]> 0" class="columns">
+            <div class="column">Fee: {{fee.title}}</div>
+            <div class="column"><label class="label">Name</label></div>
+            <div class="column"><label class="label">Id</label></div>
+          </div>
+
+          <div *ngFor="let people of arrayOne(fee_tickets[i]); let j= index;">
+            <div class="columns">
+              <div class="column">
+                <input
+                  class="input username-ticket" type="text"
+                  (change)="updateAssistants()"
+                  placeholder="e.g Pablo Ospino" required>
+              </div>
+              <div class="column">
+                <input
+                  class="input userid-ticket"
+                  type="tel"
+                  (change)="updateAssistants()"
+                  placeholder="e.g.
+                  71234567P" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="payment-checkout" [style.display]="step_id != 2 ? 'none' : ''">
+      <div class="field">
+        <span class="help is-info">Confirm by writting your username: <strong>{{tokenService.getUsername()}}</strong></span>
+        <label class="label">Name</label>
+        <div class="control">
+          <input id="checkout-name" class="input" (change)="updateCardPayment()"
+            type="name" placeholder="e.g. Pablo Ospino">
+        </div>
+      </div>
+      <div>
+        <span>Total: {{getTotalPrice()}}</span>
+        <br>
+        <span>Your points: {{getPoints()}}</span>
+        <span class="help is-danger">{{error_points}}</span>
+      </div>
+    </div>
+
+    <div id="confirmation" class="is-success center" [style.display]="step_id !=
+      3 ?
+      'none' : ''"><i class="fas fa-check fa-10x is-success"></i></div>
+  </div>
+</section>
+<footer class="modal-card-foot">
+  <div class="columns" id="footer-modal">
+    <div class="column">
+      <button class="button is-info"
+        (click)="back()"
+        [disabled]="step_id == 0">Back</button>
+    </div>
+    <div class="column" id="continue-button">
+      <p *ngIf="this.total_people>10" class="help is-danger max-10-help">
+        Max is 10.
+      </p>
+      <button class="button is-success"
+        (click)="continue()"
+        [disabled]="step_id == 3 || this.total_people == 0 || this.total_people>
+        10 || (!isDocumentationfilled && step_id == 1) || (step_id==2 &&
+        !isCheckoutFilled) || (step_id == 2 && error_points.length > 0)">
+        Continue
+      </button>
+    </div>
+  </div>
+</footer>

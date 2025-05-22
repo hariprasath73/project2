@@ -1,0 +1,63 @@
+<div class="columns is-mobile">
+  <div class="column">
+    <button class="button is-success"
+      [disabled]="pastEvent"
+      (click)="openBuyTicketsModal()">Buy from: {{getEventCheapestPrice()}}</button>
+  </div>
+  <div class="column">
+    <div id="edit-button" *ngIf="tokenStorageService.getUsername() ==
+      event_model.username">
+      <a routerLink="/event/edit/{{id}}" class="button is-info is-small
+        is-right">Edit</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-content">
+    <div class="content">
+      <p class="title is-4">{{event_model.title}}</p>
+      <p class="subtitle is-6">{{event_model.subtitle}}</p>
+      <strong>Date: </strong>
+      <time datetime="2016-1-1">{{event_model.date}}</time>
+      <hr>
+      {{event_model.description}}
+      <hr>
+      <div class="columns">
+        <div class="column">
+          <div class="label">Fees:</div>
+          <div *ngFor="let fee of event_model.fees; let j= index">
+            <div class="control card">
+              <div id="fee-info">
+                <label class="label">{{fee.title}}</label>
+                <span class="help">Price: {{fee.price}}</span>
+                <span class="help">{{fee.description}}</span>
+              </div>
+            </div>
+            <br>
+          </div>
+        </div>
+        <div class="column">
+          <div class="match-parent brand">MusicMeets</div>
+        </div>
+      </div>
+      <hr>
+      <a>@{{event_model.username}}</a>
+      <br>
+    </div>
+
+    <div class="card-footer">
+      <button class="button card-buy-tickets-button is-success"
+        [disabled]="pastEvent"
+        (click)="openBuyTicketsModal()">Buy Tickets</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-container" class="container">
+  <div class="modal" id="buy_tickets_modal">
+    <div class="modal-background" (click)="closeBuyTicketsModal()"></div>
+    <div class="modal-card">
+      <app-payment-modal [event]="event_model"></app-payment-modal>
+    </div>
+  </div>
+</div>
