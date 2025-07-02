@@ -1,0 +1,39 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_REPO_NAME: "project1/apprunner"
+    AWS_ACCOUNT_ID: "048970710401"
+    AWS_DEFAULT_REGION: "us-east-1"
+
+phases:
+  pre_build:
+    commands:
+      - echo "🔐 Logging in to Amazon ECR..."
+      - echo "📍 AWS Region: $AWS_DEFAULT_REGION"
+      - echo "🏦 AWS Account ID: $AWS_ACCOUNT_ID"
+      - aws --version
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - export IMAGE_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}
+      - echo "🖼️ IMAGE_URI resolved to: $IMAGE_URI"
+
+  build:
+    commands:
+      - echo "🔧 Building the Docker image..."
+      - docker build -t $IMAGE_URI .
+      - docker tag $IMAGE_URI $IMAGE_URI:latest
+      - echo "✅ Docker image tagged: $IMAGE_URI:latest"
+
+  post_build:
+    commands:
+      - echo "🚀 Pushing the Docker image to ECR..."
+      - docker push $IMAGE_URI:latest
+      - echo "📝 Writing imagedefinitions.json for deployment..."
+      - printf '[{"name":"container","imageUri":"%s"}]' $IMAGE_URI:latest > imagedefinitions.json
+      - echo "📄 imagedefinitions.json content:"
+      - cat imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
+
