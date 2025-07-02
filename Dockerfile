@@ -25,4 +25,4 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 # Copy the built static files from the build stage
 COPY --from=build /app/dist/events-website /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 3000
