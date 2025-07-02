@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build --------------
-FROM node:16 as build
+FROM public.ecr.aws/docker/library/node:16 AS build
 
 # Set working directory inside the container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # ----------- Stage 2: Nginx Server --------------
-FROM nginx:latest
+FROM public.ecr.aws/docker/library/nginx:latest
 
 # Copy custom Nginx config if you have one
 COPY default.conf /etc/nginx/conf.d/default.conf
