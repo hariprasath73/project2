@@ -3,16 +3,19 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
+      - echo Logging into Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
       - export IMAGE_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $IMAGE_URI .
-      - docker tag $IMAGE_URI $IMAGE_URI:latest
+      - docker build -t $IMAGE_URI:latest .
   post_build:
     commands:
       - echo Pushing Docker image to ECR...
       - docker push $IMAGE_URI:latest
-      - echo Build complete
+      - echo Writing image definition file for ECS...
+      - printf '[{"name":"ecs-project-container","imageUri":"%s"}]' $IMAGE_URI:latest > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
